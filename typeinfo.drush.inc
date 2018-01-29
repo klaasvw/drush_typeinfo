@@ -280,8 +280,16 @@ function drush_typeinfo_list($type = NULL) {
       continue;
     }
     if (isset($info[$entity]['bundles'])) {
-      foreach (array_keys($info[$entity]['bundles']) as $bundle) {
-        array_push($bundles, array($entity, $bundle));
+      foreach ($info[$entity]['bundles'] as $bundle => $bundle_info) {;
+        array_push($bundles, array($entity, $bundle_info['label'], $bundle, '---' ,'---', '---'));
+        $type_info = $info[$entity];
+        $label = $type_info['bundles'][$bundle]['label'];
+        $field_info = field_info_instances($entity, $bundle);
+
+        foreach ($field_info as $field => $info) {
+          $field_info = field_info_field($field);
+          array_push($bundles, array('', '', '', $info['label'], $field, $field_info['type']));
+        }
       }
     }
   }
